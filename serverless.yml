@@ -1,8 +1,8 @@
+org: marcoornelas
+app: myapp
 
 
-service: service-template
-
-frameworkVersion: '2'
+service: user-service
 
 provider:
   name: aws
@@ -10,18 +10,53 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: us-east-1
 
+# you can add statements to the Lambda function's IAM Role here
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - "dynamodb:Query"
+        - "dynamodb:PutItem"
+      Resource:
+        - arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:custom.dynamodb.userTable}
+        - arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:custom.dynamodb.userTable}/index/pk
+# you can define service wide environment variables here
+environment:
+  DYNAMODB_USER_TABLE: ${self:custom.dynamodb.userTable}
+
 functions:
-  testFunction:
-    handler: src/functions/testFunction.testFunction
-  hello:
-    handler: handler.hello
+  createUser:
+    handler: src/functions/createUser.createUser
+    events:
+      - http:
+          method: post
+          cors: true
+          path: /v1/user
+          request:
+            schema:
+              application/json: ${file(src/schema/create_user_request.json)}
 
 plugins:
   - serverless-pseudo-parameters
   - serverless-mocha
-  
+
 custom:
+  dynamodb:
+    userTable: ${self:service}-userTable-${self:provider.stage}
   serverless-mocha-plugin:
     testTemplate: templates/test-template.ejs
     functionTemplate: templates/function-template.ejs
+resources:
+  Resources:
+    userTable:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      Properties:
+        TableName: ${self:custom.dynamodb.userTable}
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
 
