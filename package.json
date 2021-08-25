@@ -1,0 +1,1 @@
+{"name":"service-template","description":"","version":"0.1.0","devDependencies":{"aws-sdk":"^2.975.0","aws-sdk-mock":"^5.2.2","serverless":"^2.55.0","serverless-mocha":"^1.12.0","serverless-pseudo-parameters":"^2.6.0"}}
