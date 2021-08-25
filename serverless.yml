@@ -25,6 +25,8 @@ environment:
   JWT_SECRET: ${param:JWT_SECRET}
 
 functions:
+  validate:
+    handler: src/functions/validate.validate
   loginUser:
     handler: src/functions/login.login
     events:
