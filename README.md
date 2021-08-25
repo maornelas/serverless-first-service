@@ -3,9 +3,10 @@ Setting up our template and local testing
 
 ###### Install plugin serverless
 
+```
 serverless plugin install --name serverless-mocha
 serverless plugin install --name serverless-pseudo-parameters
-
+```
 ###### Create function 
 
 ```
