@@ -1,15 +1,19 @@
 # serverless-template-local-testing
 Setting up our template and local testing
 
-## Install plugin serverless
+###### Install plugin serverless
 
 serverless plugin install --name serverless-mocha
 serverless plugin install --name serverless-pseudo-parameters
 
-## Create function 
+###### Create function 
+
+```
 sls create function -f testFunction --handler src/functions/testFunction.testFunction -p src/tests/
+```
+###### Intalll mocha and test
 
-## Intalll mocha and test
-
+```
 npm install -g mocha
 mocha src/tests
+```
