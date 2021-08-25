@@ -12,7 +12,7 @@ serverless plugin install --name serverless-pseudo-parameters
 ```
 sls create function -f testFunction --handler src/functions/testFunction.testFunction -p src/tests/
 ```
-###### Intalll mocha and test
+###### Install mocha and test
 
 ```
 npm install -g mocha
